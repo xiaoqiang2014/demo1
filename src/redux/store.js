@@ -4,12 +4,22 @@ const initialState = {
   todos: [],
 };
 
+const priorityOrder = {
+  重要: 0,
+  一般: 1,
+  不重要: 2,
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_TODO':
       const newTodo = action.payload;
-      const updatedTodos = [...state.todos, newTodo];
-      updatedTodos.sort((a, b) =>  a.priority -b.priority );
+      const updatedTodo = {
+        ...newTodo,
+        priority: newTodo.priority || '一般', // Assign default priority if not selected
+      };
+      const updatedTodos = [...state.todos, updatedTodo];
+      updatedTodos.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
       return {
         ...state,
